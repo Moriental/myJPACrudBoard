@@ -12,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public void createUser(UserDTO userDTO) {
-        User user = userDTO.toEntity();
-        userRepository.save(user);
-    }
+
     public void updateUser(Long id,UserDTO userDTO) {
         User user = userDTO.toEntity();
         userRepository.findById(id)

@@ -22,15 +22,16 @@ public class BoardService {
     public void boardUpdate(BoardDTO boardDTO,Long id) {
         Board board = boardDTO.toEntity();
         boardRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("해당 하는 글이 없습니다."));
+                .orElseThrow(()->new IllegalArgumentException("해당 하는 글이 없습니다."));
 
         board.setTitle(boardDTO.getTitle());
         board.setContent(boardDTO.getContent());
         boardRepository.save(board);
     }
-    public void boardDelete(Long id){
-        boardRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("해당 하는 글이 없습니다."));
+    public void boardDelete(Long id) {
+        if (!boardRepository.existsById(id)) {
+            throw new IllegalArgumentException("해당 하는 글이 없습니다.");
+        }
         boardRepository.deleteById(id);
     }
 }
