@@ -54,6 +54,7 @@ public class UserDTO {
         user.setEmail(this.getEmail());
         user.setPassword(this.getPassword());
         user.setRoleStatus(RoleStatus.valueOf(this.getRoleStatus()));
+        user.setCreated_at(this.getCreated_at());
         return user;
     }
 
