@@ -1,11 +1,14 @@
 package myCrudBoard.demo.controller;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import myCrudBoard.demo.domain.dto.UserDTO;
 import myCrudBoard.demo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,9 +23,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String LoginProcess(Model model, @RequestParam("username") String username, @RequestParam("password") String password, UserDTO userDTO){
-        model.addAttribute("username",username);
-        model.addAttribute("password",password);
+    public String LoginProcess(@Valid @ModelAttribute UserDTO userDTO, Model model, HttpSession session){
         return "login";
     }
 }

@@ -6,7 +6,6 @@ import myCrudBoard.demo.domain.Board;
 import myCrudBoard.demo.domain.dto.BoardDTO;
 import myCrudBoard.demo.repository.BoardRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +22,7 @@ public class BoardService {
     public void boardWrite(BoardDTO boardDTO) {
         Board board = new Board();
         board.updateBoardDetails(boardDTO.getTitle(),boardDTO.getContent(),boardDTO.getViews());
+        board.setUser(board.getUser());
         log.info("게시글 글 쓰기 성공 {}",board);
         boardRepository.save(board);
     }
@@ -34,6 +34,7 @@ public class BoardService {
         board.setTitle(boardDTO.getTitle());
         board.setContent(boardDTO.getContent());
     }
+
     public void boardDelete(Long id) {
         if (!boardRepository.existsById(id)) {
             throw new IllegalArgumentException("해당 하는 글이 없습니다.");
