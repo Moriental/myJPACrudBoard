@@ -1,16 +1,28 @@
 package myCrudBoard.demo.domain.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import myCrudBoard.demo.domain.Board;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
+@NoArgsConstructor
 public class BoardDTO {
+
+    @NotBlank(message = "제목이 비어있으면 안됩니다.")
     private String title;
+    @NotBlank(message = "내용이 비어있으면 안됩니다.")
+
     private String content;
     private int views;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @Builder
     public BoardDTO(String title, String content, int views) {

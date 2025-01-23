@@ -15,10 +15,15 @@ public class JoinService {
     private final UserRepository userRepository;
 
     public void createUser(UserDTO userDTO) {
-
-        User user = userDTO.toEntity();
+        User user = new User();
         System.out.println(user);
-        user.setRoleStatus(RoleStatus.USER);
+        user.updateUserDetails(
+                userDTO.getUsername(),
+                userDTO.getNickname(),
+                userDTO.getEmail(),
+                userDTO.getPassword(),
+                RoleStatus.USER
+        );
         if(userRepository.existsByNickname(user.getNickname())){
             log.info("중복 닉네임은 가입 시도 {}",user.getNickname());
             throw new IllegalArgumentException("중복된 닉네임입니다.");

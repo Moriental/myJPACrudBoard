@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class Comment extends baseEntity{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMMENT_ID")
     private Long id;
     private String content;
@@ -21,4 +21,8 @@ public class Comment extends baseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
+
+    public void updateCommentDetails(String content){
+        this.content = content;
+    }
 }

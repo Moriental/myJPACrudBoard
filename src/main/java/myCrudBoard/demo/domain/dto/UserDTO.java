@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-//@NoArgsConstructor // 매개변수가 없는 클래스 생성자 (final 이 있을 경우 force = true)로 하여 0이나 null로 초기화함
+@NoArgsConstructor // 매개변수가 없는 클래스 생성자 (final 이 있을 경우 force = true)로 하여 0이나 null로 초기화함
 public class UserDTO {
     @NotBlank(message = "이름을 입력해주세요.")
     private String username;
@@ -54,7 +54,6 @@ public class UserDTO {
         user.setEmail(this.getEmail());
         user.setPassword(this.getPassword());
         user.setRoleStatus(RoleStatus.valueOf(this.getRoleStatus()));
-        user.setCreated_at(this.getCreated_at());
         return user;
     }
 

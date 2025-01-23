@@ -22,11 +22,13 @@ public class CommentService {
         comment.setContent(commentDTO.getContent());
         commentRepository.save(comment);
     }
+
     public void deleteComment(CommentDTO commentDTO,Long id) {
         Comment comment = commentDTO.toEntity();
         commentRepository.findById(id).orElseThrow(() -> new RuntimeException("댓글이 존재하지 않습니다."));
         commentRepository.deleteById(id);
     }
+
     public void updateComment(CommentDTO commentDTO, Long id){
         Comment comment = commentDTO.toEntity();
         commentRepository.findById(id)

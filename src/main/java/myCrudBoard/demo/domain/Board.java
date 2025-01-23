@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Board extends baseEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID")
     private Long id;
 
@@ -21,4 +21,10 @@ public class Board extends baseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="USER_ID")
     private User user;
+
+    public void updateBoardDetails(String title,String content,int viewCount){
+        this.title = title;
+        this.content = content;
+        this.viewCount = viewCount;
+    }
 }

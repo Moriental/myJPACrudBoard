@@ -12,7 +12,7 @@ import java.util.Objects;
 @Getter
 @Setter
 public class User extends baseEntity{
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
     private Long id;
 
@@ -38,5 +38,12 @@ public class User extends baseEntity{
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getUsername(), getPassword(), getNickname(), getEmail(), getRoleStatus());
+    }
+    public void updateUserDetails(String username, String nickname, String email, String password, RoleStatus roleStatus) {
+        this.username = username;
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+        this.roleStatus = roleStatus;
     }
 }

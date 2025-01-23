@@ -28,9 +28,8 @@ public class RegisterController {
             model.addAttribute("userDTO",userDTO);
             return "register";
         }
-        userDTO.setRoleStatus(String.valueOf(RoleStatus.USER));
         joinService.createUser(userDTO);
 
-        return "redirect:/board";
+        return "redirect:/";
     }
 }
