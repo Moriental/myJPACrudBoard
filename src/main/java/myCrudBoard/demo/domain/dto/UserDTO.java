@@ -8,7 +8,6 @@ import myCrudBoard.demo.domain.User;
 @Setter
 //@NoArgsConstructor // 매개변수가 없는 클래스 생성자 (final 이 있을 경우 force = true)로 하여 0이나 null로 초기화함
 public class UserDTO {
-    private final Long id;
     private String username;
     private String nickname;
     private String password;
@@ -16,8 +15,7 @@ public class UserDTO {
     private String roleStatus;
 
     @Builder
-    public UserDTO(Long id,String username, String nickname, String password, String email, String roleStatus) {
-        this.id = id;
+    public UserDTO(String username, String nickname, String password, String email, String roleStatus) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
@@ -26,7 +24,6 @@ public class UserDTO {
     }
     public static UserDTO fromEntity(User user) {
         return UserDTO.builder()
-                .id(user.getId())
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .email(user.getEmail())

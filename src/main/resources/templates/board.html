@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>간단한 게시판</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        nav {
+            background-color: #f1f1f1;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: black;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            background-color: #f1f1f1;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">홈</a>
+        <a href="/login">로그인</a>
+        <a href="/board_write">글쓰기</a>
+    </nav>
+    <h1>게시판</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>생성 날짜</th>
+                <th>조회수</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>첫 번째 게시글</td>
+                <td>2024-01-23</td>
+                <td>120</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <footer>
+        <p>© 2024 간단한 게시판. All rights reserved.</p>
+    </footer>
+</body>
+</html>

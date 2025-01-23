@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>글 작성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        input, textarea {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 200px;
+        }
+        .submit-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>새 글 작성</h1>
+<form th:action="@{/board/write}" method="post">
+    <input type="text" name="title" placeholder="제목" required>
+    <textarea name="content" placeholder="내용" required></textarea>
+    <button type="submit" class="submit-button">작성 완료</button>
+</form>
+</body>
+</html>
