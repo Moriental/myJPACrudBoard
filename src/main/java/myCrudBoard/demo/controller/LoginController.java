@@ -21,9 +21,4 @@ public class LoginController {
     public String Login(){
         return "login";
     }
-
-    @PostMapping("/login")
-    public String LoginProcess(@Valid @ModelAttribute UserDTO userDTO, Model model){
-        return "login";
-    }
 }

@@ -4,6 +4,9 @@ import jakarta.validation.Valid;
 import myCrudBoard.demo.domain.Board;
 import myCrudBoard.demo.domain.dto.BoardDTO;
 import myCrudBoard.demo.service.BoardService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -25,7 +30,18 @@ public class BoardController {
 
     @GetMapping("/")
     public String home(Model model) {
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+        Iterator<? extends GrantedAuthority> iter =authorities.iterator();
+        GrantedAuthority grantedAuthority = iter.next();
+        String role =grantedAuthority.getAuthority();
+
         List<Board> boardList = boardService.findAll();
+        model.addAttribute("role",role);
+        model.addAttribute("id",id);
         model.addAttribute("boardList",boardList);
         return "board";
     }
