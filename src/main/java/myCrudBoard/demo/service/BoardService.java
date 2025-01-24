@@ -6,7 +6,9 @@ import myCrudBoard.demo.domain.Board;
 import myCrudBoard.demo.domain.dto.BoardDTO;
 import myCrudBoard.demo.repository.BoardRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,10 +21,20 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
+    public BoardDTO findById(Long id){
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다."));
+        return BoardDTO.builder()
+                .title(board.getTitle())
+                .content(board.getContent())
+                .views(board.getViewCount())
+                .createdAt(board.getFormattedCreatedAt())
+                .build();
+    }
+    @Transactional
     public void boardWrite(BoardDTO boardDTO) {
         Board board = new Board();
         board.updateBoardDetails(boardDTO.getTitle(),boardDTO.getContent(),boardDTO.getViews());
-        board.setUser(board.getUser());
         log.info("게시글 글 쓰기 성공 {}",board);
         boardRepository.save(board);
     }

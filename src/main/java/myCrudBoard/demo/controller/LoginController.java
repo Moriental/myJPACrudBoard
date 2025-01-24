@@ -23,7 +23,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String LoginProcess(@Valid @ModelAttribute UserDTO userDTO, Model model, HttpSession session){
+    public String LoginProcess(@Valid @ModelAttribute UserDTO userDTO, Model model){
         return "login";
     }
 }

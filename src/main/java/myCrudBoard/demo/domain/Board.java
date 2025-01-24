@@ -15,6 +15,7 @@ public class Board extends baseEntity {
     private Long id;
 
     private String title;
+    @Column(length = 550)
     private String content;
     private int viewCount;
 

@@ -7,6 +7,7 @@ import myCrudBoard.demo.domain.User;
 import myCrudBoard.demo.domain.dto.UserDTO;
 import myCrudBoard.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class JoinService {
     private final UserRepository userRepository;
 
+    @Transactional
     public void createUser(UserDTO userDTO) {
         User user = new User();
         System.out.println(user);

@@ -21,14 +21,16 @@ public class BoardDTO {
     private String content;
     private int views;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
 
     @Builder
-    public BoardDTO(String title, String content, int views) {
+    public BoardDTO(String title, String content, int views,String createdAt, String updatedAt) {
         this.title = title;
         this.content = content;
         this.views = views;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
     public BoardDTO fromEntity(Board board) {
         return BoardDTO.builder()

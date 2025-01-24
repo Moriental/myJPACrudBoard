@@ -31,13 +31,13 @@ public class UserDTO {
     private String roleStatus;
 
     @Builder
-    public UserDTO(String username, String nickname, String password, String email, String roleStatus,LocalDateTime created_at) {
+    public UserDTO(String username, String nickname, String password, String email, String roleStatus) {
         this.username = username; //이름
         this.nickname = nickname; //닉네임
         this.password = password; //비밀번호
         this.email = email; //이메일
         this.roleStatus = roleStatus;
-        this.created_at = (created_at == null) ? LocalDateTime.now() : created_at;
+        //this.created_at = (created_at == null) ? LocalDateTime.now() : created_at;
     }
     public static UserDTO fromEntity(User user) {
         return UserDTO.builder()
