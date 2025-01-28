@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>글 작성</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .write-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        textarea {
+            height: 250px;
+            resize: vertical;
+        }
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+        .field-error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="write-container">
+    <h1>글 수정</h1>
+    <form th:action="@{/board/${boardDTO.id}/update}" th:object="${boardDTO}" method="post">
+        <div class="form-group">
+            <input type="text" th:field="*{title}" placeholder="제목을 입력하세요">
+            <div th:if="${#fields.hasErrors('title')}"
+                 th:errors="*{title}"
+                 class="field-error">
+            </div>
+        </div>
+        <div class="form-group">
+            <textarea th:field="*{content}" placeholder="내용을 입력하세요"></textarea>
+            <div th:if="${#fields.hasErrors('content')}"
+                 th:errors="*{content}"
+                 class="field-error">
+            </div>
+        </div>
+        <button type="submit" class="submit-button">작성 완료</button>
+    </form>
+</div>
+</body>
+</html>

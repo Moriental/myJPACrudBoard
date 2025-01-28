@@ -5,6 +5,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import myCrudBoard.demo.domain.dto.UserDTO;
 import myCrudBoard.demo.service.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class LoginController {
     private final UserService userService;
-
     @GetMapping("/login")
-    public String Login(){
+    public String Login(Model model) {
+
         return "login";
     }
 }

@@ -1,6 +1,8 @@
 package myCrudBoard.demo.config;
 
 import myCrudBoard.demo.handler.CustomAuthenticationSuccessHandler;
+import myCrudBoard.demo.handler.CustomLogoutHandler;
+import myCrudBoard.demo.handler.CustomLogoutSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,7 +19,6 @@ public class SecurityConfig {
     public SecurityConfig(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
         this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
     }
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -38,14 +39,24 @@ public class SecurityConfig {
                         .permitAll()
                         .defaultSuccessUrl("/",true)
                         .successHandler(customAuthenticationSuccessHandler));
+        //로그 아웃
+        http
+                .logout(auth -> auth
+                        .logoutUrl("/logout")
+                        .invalidateHttpSession(true)
+                        .addLogoutHandler(new CustomLogoutHandler())
+                        .logoutSuccessHandler(new CustomLogoutSuccessHandler())
+                        .deleteCookies("JSESSIONID")
+                        .permitAll());
         // 세션 관리
         http
                 .sessionManagement((auth) -> auth
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(true));
+        http
+                .csrf((csrf) -> csrf
+                        .ignoringRequestMatchers("/loginProc","register"));
 
         return http.build();
     }
-
-
 }

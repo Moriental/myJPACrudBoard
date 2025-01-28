@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BoardDTO {
 
+    private Long id;
+
     @NotBlank(message = "제목이 비어있으면 안됩니다.")
     private String title;
     @NotBlank(message = "내용이 비어있으면 안됩니다.")
@@ -25,7 +27,8 @@ public class BoardDTO {
     private String updatedAt;
 
     @Builder
-    public BoardDTO(String title, String content, int views,String createdAt, String updatedAt) {
+    public BoardDTO(Long id, String title, String content, int views,String createdAt, String updatedAt) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.views = views;

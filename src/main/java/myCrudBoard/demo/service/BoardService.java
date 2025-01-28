@@ -24,13 +24,16 @@ public class BoardService {
     public BoardDTO findById(Long id){
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다."));
+
         return BoardDTO.builder()
+                .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .views(board.getViewCount())
                 .createdAt(board.getFormattedCreatedAt())
                 .build();
     }
+
     @Transactional
     public void boardWrite(BoardDTO boardDTO) {
         Board board = new Board();
