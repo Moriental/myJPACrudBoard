@@ -26,16 +26,19 @@ public class BoardDTO {
 
     private String createdAt;
     private String updatedAt;
+
+    private String user;
     private String userName; // 작성자 이름
 
     @Builder
-    public BoardDTO(Long id, String title, String content, int views,String createdAt, String updatedAt, String userName) {
+    public BoardDTO(Long id, String title, String content, int views,String createdAt, String updatedAt, String userName,String user) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.views = views;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.user = user;
         this.userName = userName;
     }
 
@@ -45,6 +48,7 @@ public class BoardDTO {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .views(board.getViewCount())
+                .user(String.valueOf(board.getUser()))
                 .userName(board.getUser().getUsername())
                 .build();
     }

@@ -111,9 +111,14 @@
 
     <div class="button-group" th:object="${boardDTO}">
         <!-- 수정 버튼 -->
-        <a th:href="@{/board/{id}/update(id=*{id})}" class="btn btn-edit">글 수정</a>
+        <a th:if="${isOwner}"
+           th:href="@{/board/{id}/update(id=*{id})}"
+           class="btn btn-edit">글 수정</a>
         <!-- 삭제 버튼 -->
-        <a th:href="@{/board/{id}/delete(id=*{id})}" class="btn btn-delete" onclick="return confirm('정말로 삭제하시겠습니까?');">글 삭제</a>
+        <a th:if="${isOwner}"
+           th:href="@{/board/{id}/delete(id=*{id})}"
+           class="btn btn-delete"
+           onclick="return confirm('정말로 삭제하시겠습니까?');">글 삭제</a>
     </div>
 
     <div class="comments-section">

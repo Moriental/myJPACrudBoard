@@ -67,7 +67,7 @@
 <body>
 <div class="write-container">
     <h1>글 수정</h1>
-    <form th:action="@{/board/${boardDTO.id}/update}" th:object="${boardDTO}" method="post">
+    <form th:action="@{/board/{id}/update(id=*{id})}" th:object="${boardDTO}" method="post">
         <div class="form-group">
             <input type="text" th:field="*{title}" placeholder="제목을 입력하세요">
             <div th:if="${#fields.hasErrors('title')}"

@@ -2,12 +2,10 @@ package myCrudBoard.demo.domain.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import myCrudBoard.demo.domain.RoleStatus;
 import myCrudBoard.demo.domain.User;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -26,7 +24,6 @@ public class UserDTO {
     @NotBlank(message = "이메일을 입력해주세요.")
     private String email;
 
-    private LocalDateTime created_at;
 
     private String roleStatus;
 
@@ -37,7 +34,6 @@ public class UserDTO {
         this.password = password; //비밀번호
         this.email = email; //이메일
         this.roleStatus = roleStatus;
-        //this.created_at = (created_at == null) ? LocalDateTime.now() : created_at;
     }
     public static UserDTO fromEntity(User user) {
         return UserDTO.builder()

@@ -1,11 +1,15 @@
 package myCrudBoard.demo.controller;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import myCrudBoard.demo.domain.Board;
 import myCrudBoard.demo.domain.User;
 import myCrudBoard.demo.domain.dto.BoardDTO;
+import myCrudBoard.demo.domain.dto.CustomUserDetails;
 import myCrudBoard.demo.service.BoardService;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 
 @Controller
+@Slf4j
 public class BoardController {
     private final BoardService boardService;
 
@@ -59,8 +64,22 @@ public class BoardController {
 
     @GetMapping("/board/{id}")
     public String boardDetail(@PathVariable Long id, @ModelAttribute BoardDTO boardDTO, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = null;
+
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+            username = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
+        }
+        else{
+            log.info("유저 네임이 없음 {}",username);
+        }
+        log.info("Board user : {}", boardDTO.getUserName());
         boardDTO = boardService.findById(id);
+
+        boolean isOwner = username!= null && boardDTO.getUserName().equals(username);
+
         model.addAttribute("boardDTO",boardDTO);
+        model.addAttribute("isOwner",isOwner);
         return "board_detail";
     }
 
@@ -73,9 +92,9 @@ public class BoardController {
 
     @Transactional
     @PostMapping("/board/{id}/update")
-    public String updateBoard(@PathVariable("id") Long id, @ModelAttribute BoardDTO boardDTO) {
-        //boardService.update(id, boardDTO); // 업데이트 로직 구현 필요
-        return "redirect:/board/" + id; // 상세 페이지로 리다이렉트
+    public String updateBoard(@PathVariable("id") Long id, @ModelAttribute BoardDTO boardDTO,User user) {
+        boardService.boardUpdate(boardDTO,id);
+        return "redirect:/board/" + id ; // 상세 페이지로 리다이렉트
     }
 
     /*private static void getIdAuthentication() {
