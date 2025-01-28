@@ -14,11 +14,18 @@
             background-color: #f1f1f1;
             padding: 10px;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between; /* 좌우 정렬 */
+            align-items: center; /* 세로 중앙 정렬 */
         }
         nav a {
             margin-right: 15px;
             text-decoration: none;
             color: black;
+        }
+        .span_name {
+            margin-left: 20px;
+            font-weight: bold;
         }
         table {
             width: 100%;
@@ -42,20 +49,23 @@
 </head>
 <body>
 <nav>
-    <a href="/">홈</a>
-    <span sec:authorize="isAnonymous()">
-            <a href="/login">로그인</a>
-            <a href="/register">가입</a>
+    <div>
+        <a href="/">홈</a>
+        <span sec:authorize="isAnonymous()">
+                <a href="/login">로그인</a>
+                <a href="/register">가입</a>
+            </span>
+        <span sec:authorize="isAuthenticated()">
+                <a href="/board_write">글쓰기</a>
+                <a href="/mypage">마이페이지</a>
+            <!-- 마이페이지 바로 옆에 로그아웃 버튼 배치 -->
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" style="display:inline;">로그 아웃</button>
+                </form>
         </span>
-    <span sec:authorize="isAuthenticated()">
-            <a href="/board_write">글쓰기</a>
-            <a href="/mypage">마이페이지</a>
-        <!-- 마이페이지 바로 옆에 로그아웃 버튼 배치 -->
-            <form th:action="@{/logout}" method="post" style="display:inline;">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" style="display:inline;">로그 아웃</button>
-            </form>
-        </span>
+    </div>
+    <span sec:authorize="isAuthenticated()" class="span_name">안녕하세요, <span sec:authentication="name"></span>님!</span>
 </nav>
 <h1>나만의 게시판</h1>
 <table>
@@ -63,9 +73,9 @@
     <tr>
         <th>번호</th>
         <th>제목</th>
-        <th>생성 날짜</th>
         <th>글쓴이</th>
         <th>조회수</th>
+        <th>생성 날짜</th>
     </tr>
     </thead>
     <tbody>
@@ -74,9 +84,9 @@
         <td>
             <a th:href="@{'/board/' + ${board.id}}" th:text="${board.title}"></a>
         </td>  <!-- 게시글 제목 -->
-        <td th:text="${board.getFormattedCreatedAt()}"></td><!-- 게시글 생성 날짜 -->
         <td th:text="${board.getUsername()}"></td>
         <td th:text="${board.viewCount}"></td>  <!-- 게시글 조회수 -->
+        <td th:text="${board.getFormattedCreatedAt()}"></td><!-- 게시글 생성 날짜 -->
     </tr>
     </tbody>
 </table>

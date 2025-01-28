@@ -29,8 +29,8 @@ public class BoardService {
 
     public BoardDTO findById(Long id){
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다."));
-
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. Id: " + id));
+        log.info("게시판 번호 :  {}",id);
         return BoardDTO.fromEntity(board);
     }
     public BoardDTO findByIdWithUser(Long id){

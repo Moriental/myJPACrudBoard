@@ -59,7 +59,7 @@ public class BoardController {
             return "board_write";
         }
         boardService.boardWrite(boardDTO);
-        return "redirect:/";
+        return "redirect:/}";
     }
 
     @GetMapping("/board/{id}")
@@ -71,10 +71,10 @@ public class BoardController {
             username = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
         }
         else{
-            log.info("유저 네임이 없음 {}",username);
+            log.info("현재 접속중인 유저가 없음 {}",username);
         }
-        log.info("Board user : {}", boardDTO.getUserName());
         boardDTO = boardService.findById(id);
+        log.info("게시판 작성자 : {}", boardDTO.getUserName());
 
         boolean isOwner = username!= null && boardDTO.getUserName().equals(username);
 
