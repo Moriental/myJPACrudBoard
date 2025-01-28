@@ -3,7 +3,9 @@ package myCrudBoard.demo.service;
 import lombok.RequiredArgsConstructor;
 import myCrudBoard.demo.domain.Comment;
 import myCrudBoard.demo.domain.dto.CommentDTO;
+import myCrudBoard.demo.repository.BoardRepository;
 import myCrudBoard.demo.repository.CommentRepository;
+import myCrudBoard.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
+    private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
     public List<Comment> getComment(){

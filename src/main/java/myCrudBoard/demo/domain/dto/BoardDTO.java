@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import myCrudBoard.demo.domain.Board;
+import myCrudBoard.demo.domain.User;
 
 import java.time.LocalDateTime;
 
@@ -25,15 +26,17 @@ public class BoardDTO {
 
     private String createdAt;
     private String updatedAt;
+    private String userName; // 작성자 이름
 
     @Builder
-    public BoardDTO(Long id, String title, String content, int views,String createdAt, String updatedAt) {
+    public BoardDTO(Long id, String title, String content, int views,String createdAt, String updatedAt, String userName) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.views = views;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.userName = userName;
     }
 
     public static BoardDTO fromEntity(Board board) {
@@ -42,15 +45,18 @@ public class BoardDTO {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .views(board.getViewCount())
+                .userName(board.getUser().getUsername())
                 .build();
     }
 
-    public Board toEntity() {
+    public Board toEntity(User user) {
         Board board = new Board();
         board.setId(this.id);
         board.setContent(this.getContent());
         board.setTitle(this.getTitle());
         board.setViewCount(this.getViews());
+        board.setUser(user);
+        board.setUsername(user.getUsername());
         return board;
     }
 }

@@ -64,6 +64,7 @@
         <th>번호</th>
         <th>제목</th>
         <th>생성 날짜</th>
+        <th>글쓴이</th>
         <th>조회수</th>
     </tr>
     </thead>
@@ -73,7 +74,8 @@
         <td>
             <a th:href="@{'/board/' + ${board.id}}" th:text="${board.title}"></a>
         </td>  <!-- 게시글 제목 -->
-        <td th:text="${board.getFormattedCreatedAt()}"></td>  <!-- 게시글 생성 날짜 -->
+        <td th:text="${board.getFormattedCreatedAt()}"></td><!-- 게시글 생성 날짜 -->
+        <td th:text="${board.getUsername()}"></td>
         <td th:text="${board.viewCount}"></td>  <!-- 게시글 조회수 -->
     </tr>
     </tbody>

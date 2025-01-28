@@ -2,6 +2,7 @@ package myCrudBoard.demo.controller;
 
 import jakarta.validation.Valid;
 import myCrudBoard.demo.domain.Board;
+import myCrudBoard.demo.domain.User;
 import myCrudBoard.demo.domain.dto.BoardDTO;
 import myCrudBoard.demo.service.BoardService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -47,7 +48,7 @@ public class BoardController {
 
     @Transactional
     @PostMapping("/board_write")
-    public String boardWriteProcess(@Valid @ModelAttribute BoardDTO boardDTO, BindingResult bindingResult, Model model) {
+    public String boardWriteProcess(@Valid @ModelAttribute BoardDTO boardDTO, BindingResult bindingResult, Model model, User user) {
         if(bindingResult.hasErrors()) {
             model.addAttribute("boardDTO",boardDTO);
             return "board_write";

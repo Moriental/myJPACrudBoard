@@ -19,13 +19,9 @@ public class Board extends baseEntity {
     private String content;
     private int viewCount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name ="USER_ID")
     private User user;
 
-    public void updateBoardDetails(String title,String content,int viewCount){
-        this.title = title;
-        this.content = content;
-        this.viewCount = viewCount;
-    }
+    private String username;
 }
