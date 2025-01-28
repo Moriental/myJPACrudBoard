@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.relation.Role;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -22,17 +24,14 @@ public class JoinService {
 
     @Transactional
     public void createUser(UserDTO userDTO) {
-        User user = new User();
-        userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-        System.out.println(user);
+        String encodedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
 
-        user.updateUserDetails(
-                userDTO.getUsername(),
-                userDTO.getNickname(),
-                userDTO.getEmail(),
-                userDTO.getPassword(),
-                RoleStatus.USER
-        );
+        userDTO.setPassword(encodedPassword);
+        userDTO.setRoleStatus(RoleStatus.USER.name());
+
+        User user = userDTO.toEntity();
+        System.out.println(userDTO);
+
         if(userRepository.existsByUsername(user.getUsername())){
             log.info("중복 닉네임은 가입 시도 {}",user.getUsername());
             throw new IllegalArgumentException("중복된 닉네임입니다.");

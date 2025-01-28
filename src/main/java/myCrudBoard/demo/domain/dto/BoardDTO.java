@@ -35,15 +35,19 @@ public class BoardDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-    public BoardDTO fromEntity(Board board) {
+
+    public static BoardDTO fromEntity(Board board) {
         return BoardDTO.builder()
+                .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .views(board.getViewCount())
                 .build();
     }
+
     public Board toEntity() {
         Board board = new Board();
+        board.setId(this.id);
         board.setContent(this.getContent());
         board.setTitle(this.getTitle());
         board.setViewCount(this.getViews());

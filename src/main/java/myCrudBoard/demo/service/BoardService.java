@@ -25,19 +25,12 @@ public class BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다."));
 
-        return BoardDTO.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .views(board.getViewCount())
-                .createdAt(board.getFormattedCreatedAt())
-                .build();
+        return BoardDTO.fromEntity(board);
     }
 
     @Transactional
     public void boardWrite(BoardDTO boardDTO) {
-        Board board = new Board();
-        board.updateBoardDetails(boardDTO.getTitle(),boardDTO.getContent(),boardDTO.getViews());
+        Board board = boardDTO.toEntity();
         log.info("게시글 글 쓰기 성공 {}",board);
         boardRepository.save(board);
     }
@@ -46,8 +39,12 @@ public class BoardService {
         Board board = boardDTO.toEntity();
         boardRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("해당 하는 글이 없습니다."));
+
         board.setTitle(boardDTO.getTitle());
         board.setContent(boardDTO.getContent());
+
+        log.info("게시글 업데이트 성공 {}",board);
+        boardRepository.save(board);
     }
 
     public void boardDelete(Long id) {

@@ -7,6 +7,7 @@ import myCrudBoard.demo.service.BoardService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +45,7 @@ public class BoardController {
         return "board_write";
     }
 
+    @Transactional
     @PostMapping("/board_write")
     public String boardWriteProcess(@Valid @ModelAttribute BoardDTO boardDTO, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
@@ -53,6 +55,7 @@ public class BoardController {
         boardService.boardWrite(boardDTO);
         return "redirect:/";
     }
+
     @GetMapping("/board/{id}")
     public String boardDetail(@PathVariable Long id, @ModelAttribute BoardDTO boardDTO, Model model) {
         boardDTO = boardService.findById(id);
@@ -67,6 +70,7 @@ public class BoardController {
         return "board_update";
     }
 
+    @Transactional
     @PostMapping("/board/{id}/update")
     public String updateBoard(@PathVariable("id") Long id, @ModelAttribute BoardDTO boardDTO) {
         //boardService.update(id, boardDTO); // 업데이트 로직 구현 필요
