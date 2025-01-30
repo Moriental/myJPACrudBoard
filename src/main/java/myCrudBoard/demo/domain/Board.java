@@ -28,4 +28,7 @@ public class Board extends baseEntity {
         this.user = user;
         user.getBoards().add(this);  // User의 boards 리스트에 현재 Board를 추가
     }
+    public void increaseViewCount(){
+        this.viewCount++;
+    }
 }

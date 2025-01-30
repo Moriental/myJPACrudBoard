@@ -85,7 +85,7 @@
             <a th:href="@{'/board/' + ${board.id}}" th:text="${board.title}"></a>
         </td>  <!-- 게시글 제목 -->
         <td th:text="${board.getUsername()}"></td>
-        <td th:text="${board.viewCount}"></td>  <!-- 게시글 조회수 -->
+        <td th:text="${board.getViewCount()}"></td>  <!-- 게시글 조회수 -->
         <td th:text="${board.getFormattedCreatedAt()}"></td><!-- 게시글 생성 날짜 -->
     </tr>
     </tbody>

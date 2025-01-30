@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,18 +27,29 @@ public class BoardService {
     public List<Board> findAll(){
         return boardRepository.findAll();
     }
-
+    @Transactional
     public BoardDTO findById(Long id){
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. Id: " + id));
-        log.info("게시판 번호 :  {}",id);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = null;
+
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+            username = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
+            board.increaseViewCount();
+            log.info("조회수 증가 {}",board.getViewCount());
+        }
+        else{
+            log.info("현재 접속중인 유저가 없음 {}",username);
+        }
+
+        boardRepository.save(board);
+        log.info("게시판 번호 : {}",id);
+
         return BoardDTO.fromEntity(board);
     }
-    public BoardDTO findByIdWithUser(Long id){
-        Board board = boardRepository.findByIdWithUser(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. Id :" + id));
-        return BoardDTO.fromEntity(board);
-    }
+
     @Transactional
     public void boardWrite(BoardDTO boardDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -60,6 +70,7 @@ public class BoardService {
         log.info("게시글 작성한 사람 {}",user.getUsername());
         boardRepository.save(board);
     }
+
     @Transactional
     public void boardUpdate(BoardDTO boardDTO, Long id) {
         Result result = getResult(id);
@@ -113,6 +124,7 @@ public class BoardService {
         if (user == null) {
             throw new RuntimeException("유저를 찾을 수 없습니다.");
         }
+
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
         Result result = new Result(username, board);

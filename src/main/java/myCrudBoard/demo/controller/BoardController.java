@@ -6,6 +6,7 @@ import myCrudBoard.demo.domain.Board;
 import myCrudBoard.demo.domain.User;
 import myCrudBoard.demo.domain.dto.BoardDTO;
 import myCrudBoard.demo.domain.dto.CustomUserDetails;
+import myCrudBoard.demo.repository.BoardRepository;
 import myCrudBoard.demo.service.BoardService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -53,7 +54,7 @@ public class BoardController {
 
     @Transactional
     @PostMapping("/board_write")
-    public String boardWriteProcess(@Valid @ModelAttribute BoardDTO boardDTO, BindingResult bindingResult, Model model, User user) {
+    public String boardWriteProcess(@Valid @ModelAttribute BoardDTO boardDTO, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
             model.addAttribute("boardDTO",boardDTO);
             return "board_write";
@@ -73,6 +74,7 @@ public class BoardController {
         else{
             log.info("현재 접속중인 유저가 없음 {}",username);
         }
+
         boardDTO = boardService.findById(id);
         log.info("게시판 작성자 : {}", boardDTO.getUserName());
 
@@ -80,8 +82,10 @@ public class BoardController {
 
         model.addAttribute("boardDTO",boardDTO);
         model.addAttribute("isOwner",isOwner);
+
         return "board_detail";
     }
+
     @PostMapping("/board/{id}/delete")
     public String boardDelete(@PathVariable Long id, BoardDTO boardDTO) {
         boardService.boardDelete(boardDTO,id);
@@ -101,14 +105,4 @@ public class BoardController {
         boardService.boardUpdate(boardDTO,id);
         return "redirect:/board/" + id ; // 상세 페이지로 리다이렉트
     }
-
-    /*private static void getIdAuthentication() {
-        String id = SecurityContextHolder.getContext().getAuthentication().getName();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-        Iterator<? extends GrantedAuthority> iter =authorities.iterator();
-        GrantedAuthority grantedAuthority = iter.next();
-        String role =grantedAuthority.getAuthority();
-    }*/ // 시큐리티 사용자 id 이름 가져오는 코드
 }
