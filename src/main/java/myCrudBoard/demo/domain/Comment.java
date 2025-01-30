@@ -14,13 +14,18 @@ public class Comment extends baseEntity{
     private Long id;
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
+
+    public void setUser(User user) {
+        this.user = user;
+        user.getComments().add(this);  // User의 comments 리스트에 현재 Comment를 추가
+    }
 
     public void updateCommentDetails(String content){
         this.content = content;

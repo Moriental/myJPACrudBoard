@@ -115,10 +115,9 @@
            th:href="@{/board/{id}/update(id=*{id})}"
            class="btn btn-edit">글 수정</a>
         <!-- 삭제 버튼 -->
-        <a th:if="${isOwner}"
-           th:href="@{/board/{id}/delete(id=*{id})}"
-           class="btn btn-delete"
-           onclick="return confirm('정말로 삭제하시겠습니까?');">글 삭제</a>
+        <form th:if="${isOwner}" th:action="@{/board/{id}/delete(id=${id})}" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
+            <button type="submit" class="btn btn-delete">글 삭제</button>
+        </form>
     </div>
 
     <div class="comments-section">

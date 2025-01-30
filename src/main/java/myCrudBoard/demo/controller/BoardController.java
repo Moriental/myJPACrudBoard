@@ -59,7 +59,7 @@ public class BoardController {
             return "board_write";
         }
         boardService.boardWrite(boardDTO);
-        return "redirect:/}";
+        return "redirect:/";
     }
 
     @GetMapping("/board/{id}")
@@ -82,6 +82,11 @@ public class BoardController {
         model.addAttribute("isOwner",isOwner);
         return "board_detail";
     }
+    @PostMapping("/board/{id}/delete")
+    public String boardDelete(@PathVariable Long id, BoardDTO boardDTO) {
+        boardService.boardDelete(boardDTO,id);
+        return "redirect:/";
+    }
 
     @GetMapping("/board/{id}/update")
     public String boardUpdate(@PathVariable("id") Long id,@ModelAttribute BoardDTO boardDTO, Model model) {
@@ -92,7 +97,7 @@ public class BoardController {
 
     @Transactional
     @PostMapping("/board/{id}/update")
-    public String updateBoard(@PathVariable("id") Long id, @ModelAttribute BoardDTO boardDTO,User user) {
+    public String boardUpdateProc(@PathVariable("id") Long id, @ModelAttribute BoardDTO boardDTO,User user) {
         boardService.boardUpdate(boardDTO,id);
         return "redirect:/board/" + id ; // 상세 페이지로 리다이렉트
     }

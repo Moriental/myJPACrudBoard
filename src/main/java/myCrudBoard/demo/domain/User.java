@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,6 +28,24 @@ public class User extends baseEntity{
 
     @Enumerated(EnumType.STRING)
     private RoleStatus roleStatus;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Board> boards =  new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Comment> comments =  new ArrayList<>();
+    
+    //편의 메서드
+    public void addBoard(Board board) {
+        this.boards.add(board);
+        board.setUser(this);  // Board의 user를 현재 User로 설정
+    }
+
+    // Comment 추가를 위한 편의 메서드
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+        comment.setUser(this);  // Comment의 user를 현재 User로 설정
+    }
 
     @Override
     public boolean equals(Object o) {

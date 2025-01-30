@@ -7,6 +7,7 @@ import myCrudBoard.demo.domain.User;
 import myCrudBoard.demo.domain.dto.BoardDTO;
 import myCrudBoard.demo.domain.dto.CustomUserDetails;
 import myCrudBoard.demo.repository.BoardRepository;
+import myCrudBoard.demo.repository.CommentRepository;
 import myCrudBoard.demo.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     public List<Board> findAll(){
         return boardRepository.findAll();
@@ -60,7 +62,39 @@ public class BoardService {
     }
     @Transactional
     public void boardUpdate(BoardDTO boardDTO, Long id) {
-        // 현재 인증된 사용자 정보 가져오기
+        Result result = getResult(id);
+
+        // 게시물 작성자와 현재 사용자 비교
+        if (!result.board.getUser().getUsername().equals(result.username())) {
+            throw new RuntimeException("게시물을 수정할 권한이 없습니다."); // 권한 에러 발생
+        }
+
+        // 게시물 수정
+        result.board.setTitle(boardDTO.getTitle());
+        result.board.setContent(boardDTO.getContent());
+
+        log.info("게시글 업데이트 성공 {}", result.board);
+
+        // 변경사항 저장
+        boardRepository.save(result.board);
+    }
+    @Transactional
+    public void boardDelete(BoardDTO boardDTOm,Long id) {
+        Result result = getResult(id);
+
+        // 게시물 작성자와 현재 사용자 비교
+        if (!result.board().getUser().getUsername().equals(result.username())) {
+            throw new RuntimeException("게시물을 삭제할 권한이 없습니다."); // 권한 에러 발생
+        }
+
+        log.info("삭제할려는 게시물 번호 : {}", result.board().getId());
+
+        boardRepository.deleteById(id);
+
+        log.info("게시글 삭제 성공");
+    }
+
+    private Result getResult(Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String username = null;
@@ -79,32 +113,12 @@ public class BoardService {
         if (user == null) {
             throw new RuntimeException("유저를 찾을 수 없습니다.");
         }
-
-        // 게시물 존재 여부 확인
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
-
-        // 게시물 작성자와 현재 사용자 비교
-        if (!board.getUser().getUsername().equals(username)) {
-            throw new RuntimeException("게시물을 수정할 권한이 없습니다."); // 권한 에러 발생
-        }
-
-        // 게시물 수정
-        board.setTitle(boardDTO.getTitle());
-        board.setContent(boardDTO.getContent());
-
-        log.info("게시글 업데이트 성공 {}", board);
-
-        // 변경사항 저장
-        boardRepository.save(board);
+        Result result = new Result(username, board);
+        return result;
     }
 
-    public void boardDelete(Long id) {
-        if (!boardRepository.existsById(id)) {
-            throw new IllegalArgumentException("해당 하는 글이 없습니다.");
-        }
-        log.info("게시글 삭제 성공 {}");
-
-        boardRepository.deleteById(id);
+    private record Result(String username, Board board) {
     }
 }

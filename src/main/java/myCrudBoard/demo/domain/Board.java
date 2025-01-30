@@ -18,9 +18,14 @@ public class Board extends baseEntity {
     private String content;
     private int viewCount;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="USER_ID")
     private User user;
 
     private String username;
+
+    public void setUser(User user) {
+        this.user = user;
+        user.getBoards().add(this);  // User의 boards 리스트에 현재 Board를 추가
+    }
 }
