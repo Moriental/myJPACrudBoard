@@ -8,6 +8,7 @@ import myCrudBoard.demo.domain.dto.BoardDTO;
 import myCrudBoard.demo.domain.dto.CustomUserDetails;
 import myCrudBoard.demo.repository.BoardRepository;
 import myCrudBoard.demo.service.BoardService;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,10 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,7 +31,10 @@ public class BoardController {
     }
 
     @GetMapping("/")
-    public String board(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String board(Model model, @AuthenticationPrincipal UserDetails userDetails,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size) {
+
         List<Board> boardList = boardService.findAll();
         model.addAttribute("boardList",boardList);
 
@@ -104,5 +105,11 @@ public class BoardController {
     public String boardUpdateProc(@PathVariable("id") Long id, @ModelAttribute BoardDTO boardDTO,User user) {
         boardService.boardUpdate(boardDTO,id);
         return "redirect:/board/" + id ; // 상세 페이지로 리다이렉트
+    }
+    @GetMapping("/search") //검색 바 만들기
+    public String search(@RequestParam("keyword") String keyword,Model model){
+        List<Board> boards = boardService.findByTitleContaining(keyword);
+        model.addAttribute("boardList",boards);
+        return "board";
     }
 }

@@ -52,25 +52,4 @@ public class UserDTO {
         user.setRoleStatus(RoleStatus.valueOf(this.getRoleStatus()));
         return user;
     }
-
-
-    //    public static UserDTO toDto(User user){
-//        UserDTO dto = new UserDTO();
-//        dto.setUsername(user.getUsername());
-//        dto.setPassword(user.getPassword());
-//        dto.setNickname(user.getNickname());
-//        dto.setEmail(user.getEmail());
-//        dto.setRoleStatus(user.getRoleStatus().toString());
-//        return dto;
-//    }
-//    public static User toEntity(UserDTO dto){
-//        User user = new User();
-//        user.setUsername(dto.getUsername());
-//        user.setPassword(dto.getPassword());
-//        user.setNickname(dto.getNickname());
-//        user.setEmail(dto.getEmail());
-//        user.setRoleStatus(RoleStatus.valueOf(dto.getRoleStatus()));
-//        return user;
-//    }
-
 }

@@ -22,11 +22,15 @@ import java.util.List;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
-    private final CommentRepository commentRepository;
 
     public List<Board> findAll(){
         return boardRepository.findAll();
     }
+
+    public List<Board> findByTitleContaining(String keyword){
+        return boardRepository.findByTitleContaining(keyword);
+    }
+
     @Transactional
     public BoardDTO findById(Long id){
         Board board = boardRepository.findById(id)

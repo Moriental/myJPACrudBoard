@@ -18,6 +18,37 @@
             justify-content: space-between; /* 좌우 정렬 */
             align-items: center; /* 세로 중앙 정렬 */
         }
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 5px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
         nav a {
             margin-right: 15px;
             text-decoration: none;
@@ -67,7 +98,13 @@
     </div>
     <span sec:authorize="isAuthenticated()" class="span_name">안녕하세요, <span sec:authentication="name"></span>님!</span>
 </nav>
-<h1>나만의 게시판</h1>
+<div class="board-header">
+    <h1>나만의 게시판</h1>
+    <form th:action="@{/search}" method="get" class="search-form">
+        <input type="text" name="keyword" placeholder="제목으로 게시물 찾기" class="search-input">
+        <button type="submit" class="search-button">검색</button>
+    </form>
+</div>
 <table>
     <thead>
     <tr>
@@ -90,6 +127,18 @@
     </tr>
     </tbody>
 </table>
+
+<!--<div>-->
+<!--    <span th:if="${boardList.hasPrevious()}">-->
+<!--        <a th:href="@{/(page=${boardList.number -1}, size=${boardList.size})}">Previous</a>-->
+<!--    </span>-->
+
+<!--    <span th:text="${boardList.number + 1}"></span>-->
+
+<!--    <span th:if="${boardList.hasNext()}">-->
+<!--        <a th:href="@{/(page=${boardList.number+1},size=${boardList.size})}">next</a>-->
+<!--    </span>-->
+<!--</div>-->
 
 <footer>
     <p>© 2024 간단한 게시판. All rights reserved.</p>
