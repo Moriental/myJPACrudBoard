@@ -76,6 +76,31 @@
             background-color: #f1f1f1;
             padding: 10px;
         }
+        .pagination {
+            display: flex;
+            justify-content: center;  /* 중앙 정렬 */
+            margin-top: 20px;  /* 게시판과 푸터 사이의 공간 확보 */
+            margin-bottom: 20px;  /* 푸터와 가까워지지 않도록 */
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            color: #007bff;
+        }
+
+        .pagination a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination .current-page {
+            font-weight: bold;
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -127,19 +152,19 @@
     </tr>
     </tbody>
 </table>
+    <div class="pagination">
+        <!--이전 페이지 -->
+        <span th:if="${boardList.hasPrevious()}">
+            <a th:href="@{/search(keyword = ${keyword}, page=${boardList.number -1 })}">previous</a>
+        </span>
+        <!-- 현재 페이지 -->
+        <span th:text="${boardList.number + 1}"></span>
 
-<!--<div>-->
-<!--    <span th:if="${boardList.hasPrevious()}">-->
-<!--        <a th:href="@{/(page=${boardList.number -1}, size=${boardList.size})}">Previous</a>-->
-<!--    </span>-->
-
-<!--    <span th:text="${boardList.number + 1}"></span>-->
-
-<!--    <span th:if="${boardList.hasNext()}">-->
-<!--        <a th:href="@{/(page=${boardList.number+1},size=${boardList.size})}">next</a>-->
-<!--    </span>-->
-<!--</div>-->
-
+        <!-- 다음 페이지 -->
+        <span th:if="${boardList.hasNext()}">
+            <a th:href="@{/search(keyword = ${keyword}, page=${boardList.number + 1})}">Next</a>
+        </span>
+    </div>
 <footer>
     <p>© 2024 간단한 게시판. All rights reserved.</p>
 </footer>

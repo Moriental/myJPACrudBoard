@@ -9,6 +9,8 @@ import myCrudBoard.demo.domain.dto.CustomUserDetails;
 import myCrudBoard.demo.repository.BoardRepository;
 import myCrudBoard.demo.service.BoardService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,12 +34,10 @@ public class BoardController {
 
     @GetMapping("/")
     public String board(Model model, @AuthenticationPrincipal UserDetails userDetails,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
+                        @PageableDefault(size = 10,sort = "id") Pageable pageable) {
 
-        List<Board> boardList = boardService.findAll();
+        Page<Board> boardList = boardService.findAll(pageable);
         model.addAttribute("boardList",boardList);
-
         if (userDetails != null) {
             model.addAttribute("user", userDetails);
         } else {
@@ -106,10 +106,13 @@ public class BoardController {
         boardService.boardUpdate(boardDTO,id);
         return "redirect:/board/" + id ; // 상세 페이지로 리다이렉트
     }
-    @GetMapping("/search") //검색 바 만들기
-    public String search(@RequestParam("keyword") String keyword,Model model){
-        List<Board> boards = boardService.findByTitleContaining(keyword);
+    //검색 바 만들기
+    @GetMapping("/search")
+    public String search(@RequestParam("keyword") String keyword,Model model,
+                         @PageableDefault(size = 10,sort = "id") Pageable pageable){
+        Page<Board> boards = boardService.findByTitleContaining(keyword,pageable);
         model.addAttribute("boardList",boards);
+        model.addAttribute("keyword",keyword);
         return "board";
     }
 }

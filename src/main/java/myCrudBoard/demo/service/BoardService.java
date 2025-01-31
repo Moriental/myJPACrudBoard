@@ -9,6 +9,8 @@ import myCrudBoard.demo.domain.dto.CustomUserDetails;
 import myCrudBoard.demo.repository.BoardRepository;
 import myCrudBoard.demo.repository.CommentRepository;
 import myCrudBoard.demo.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,12 +25,12 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    public List<Board> findAll(){
-        return boardRepository.findAll();
+    public Page<Board> findAll(Pageable pageable){
+        return boardRepository.findAll(pageable);
     }
 
-    public List<Board> findByTitleContaining(String keyword){
-        return boardRepository.findByTitleContaining(keyword);
+    public Page<Board> findByTitleContaining(String keyword,Pageable pageable){
+        return boardRepository.findByTitleContaining(keyword,pageable);
     }
 
     @Transactional
