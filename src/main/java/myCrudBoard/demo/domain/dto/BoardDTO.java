@@ -8,7 +8,6 @@ import lombok.Setter;
 import myCrudBoard.demo.domain.Board;
 import myCrudBoard.demo.domain.User;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

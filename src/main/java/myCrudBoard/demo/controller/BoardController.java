@@ -6,7 +6,6 @@ import myCrudBoard.demo.domain.Board;
 import myCrudBoard.demo.domain.User;
 import myCrudBoard.demo.domain.dto.BoardDTO;
 import myCrudBoard.demo.domain.dto.CustomUserDetails;
-import myCrudBoard.demo.repository.BoardRepository;
 import myCrudBoard.demo.service.BoardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @Slf4j
