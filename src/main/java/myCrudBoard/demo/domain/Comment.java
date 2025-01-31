@@ -22,6 +22,8 @@ public class Comment extends baseEntity{
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 
+    private String username;
+
     public void setUser(User user) {
         this.user = user;
         user.getComments().add(this);  // User의 comments 리스트에 현재 Comment를 추가

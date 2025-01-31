@@ -20,18 +20,18 @@ public class BoardDTO {
     @NotBlank(message = "제목이 비어있으면 안됩니다.")
     private String title;
     @NotBlank(message = "내용이 비어있으면 안됩니다.")
-
     private String content;
+
     private int views;
 
     private String createdAt;
     private String updatedAt;
 
-    private String user;
+    private Long user;
     private String userName; // 작성자 이름
 
     @Builder
-    public BoardDTO(Long id, String title, String content, int views,String createdAt, String updatedAt, String userName,String user) {
+    public BoardDTO(Long id, String title, String content, int views,String createdAt, String updatedAt, String userName,Long user) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -48,7 +48,7 @@ public class BoardDTO {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .views(board.getViewCount())
-                .user(String.valueOf(board.getUser()))
+                .user((board.getUser().getId()))
                 .userName(board.getUser().getUsername())
                 .build();
     }

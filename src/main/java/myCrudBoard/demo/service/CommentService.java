@@ -21,7 +21,7 @@ public class CommentService {
         return commentRepository.findAll();
     }
 
-    public void createComment(CommentDTO commentDTO) {
+    /*public void createComment(CommentDTO commentDTO) {
         Comment comment = commentDTO.toEntity();
         comment.setContent(commentDTO.getContent());
         commentRepository.save(comment);
@@ -37,5 +37,5 @@ public class CommentService {
         Comment comment = commentDTO.toEntity();
         commentRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("댓글이 존재하지 않습니다."));
-    }
+    }*/
 }
