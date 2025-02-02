@@ -17,7 +17,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     //fetch join 오류 아니였음 그래도 공부 위해서 지우지는 않음
     @Query("select b from Board b JOIN fetch b.user where b.id=:id")
     Optional<Board> findByIdWithUser(@Param("id") Long id);
-
+    Board findById(long id);
     //페이징 메소드
     Page<Board> findAll(Pageable pageable);
 

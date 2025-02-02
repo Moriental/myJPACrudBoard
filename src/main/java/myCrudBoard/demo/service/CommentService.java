@@ -9,9 +9,10 @@ import myCrudBoard.demo.repository.BoardRepository;
 import myCrudBoard.demo.repository.CommentRepository;
 import myCrudBoard.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,23 +21,29 @@ public class CommentService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
+    public CommentDTO createComment(CommentDTO commentDTO, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
-    @Transactional
-    public void createComment(CommentDTO commentDTO, User user, Board board) {
+        Board board = boardRepository.findById(commentDTO.getBoard())
+                .orElseThrow(() -> new IllegalArgumentException(("해당 게시글이 존재하지 않습니다.")));
+
+        commentDTO.setUser(user.getId());
+        commentDTO.setUser(board.getId());
+
         Comment comment = commentDTO.toEntity(user,board);
-        comment.setContent(commentDTO.getContent());
-        commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
+
+        return CommentDTO.fromEntity(savedComment);
     }
+    public List<CommentDTO> getComments(Long boardID){
+        List<Comment> comments = commentRepository.findByBoardId(boardID);
+        List<CommentDTO> commentDTOList = new ArrayList<>();
 
-    public void deleteComment(CommentDTO commentDTO,Long id,User user, Board board) {
-        Comment comment = commentDTO.toEntity(user,board);
-        commentRepository.findById(id).orElseThrow(() -> new RuntimeException("댓글이 존재하지 않습니다."));
-        commentRepository.deleteById(id);
-    }
-
-    public void updateComment(CommentDTO commentDTO, Long id,User user, Board board){
-        Comment comment = commentDTO.toEntity(user,board);
-        commentRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("댓글이 존재하지 않습니다."));
+        for(Comment comment : comments) {
+            CommentDTO dto = CommentDTO.fromEntity(comment);
+            commentDTOList.add(dto);
+        }
+        return commentDTOList;
     }
 }

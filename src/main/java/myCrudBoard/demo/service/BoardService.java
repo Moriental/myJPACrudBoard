@@ -65,7 +65,8 @@ public class BoardService {
         if(authentication != null && authentication.getPrincipal() instanceof CustomUserDetails){
             username = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
         }
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
         if(user == null){
             throw new RuntimeException("유저를 찾을 수 없습니다.");
         }
@@ -126,10 +127,8 @@ public class BoardService {
         }
 
         // 데이터베이스에서 현재 사용자 조회
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new RuntimeException("유저를 찾을 수 없습니다.");
-        }
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
 
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
