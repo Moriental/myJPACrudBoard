@@ -3,10 +3,13 @@ package myCrudBoard.demo.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import myCrudBoard.demo.domain.Board;
+import myCrudBoard.demo.domain.Comment;
 import myCrudBoard.demo.domain.User;
 import myCrudBoard.demo.domain.dto.BoardDTO;
+import myCrudBoard.demo.domain.dto.CommentDTO;
 import myCrudBoard.demo.domain.dto.CustomUserDetails;
 import myCrudBoard.demo.service.BoardService;
+import myCrudBoard.demo.service.CommentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,13 +23,17 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @Slf4j
 public class BoardController {
     private final BoardService boardService;
+    private final CommentService commentService;
 
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, CommentService commentService) {
         this.boardService = boardService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/")
@@ -77,10 +84,11 @@ public class BoardController {
         log.info("게시판 작성자 : {}", boardDTO.getUserName());
 
         boolean isOwner = username!= null && boardDTO.getUserName().equals(username);
+        List<CommentDTO> commentList = commentService.getComments(id);
 
         model.addAttribute("boardDTO",boardDTO);
         model.addAttribute("isOwner",isOwner);
-
+        model.addAttribute("commentList",commentList);
         return "board_detail";
     }
 

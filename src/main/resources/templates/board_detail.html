@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>글 상세 페이지</title>
+    <!-- CSRF 토큰 메타 태그 (Spring Security 사용 시 필요) -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -31,10 +34,10 @@
             align-items: center;
             margin-bottom: 20px;
         }
-        .post-meta .author{
+        .post-meta .author {
             margin-left: auto;
             margin-right: 0;
-            font-weight:bold;
+            font-weight: bold;
         }
         .button-group {
             margin-top: 50px;
@@ -96,53 +99,114 @@
 </head>
 <body>
 <div class="container" th:object="${boardDTO}">
+    <!-- 글 제목 및 메타 정보 -->
     <h1 class="title" th:text="*{title}">샘플 블로그 글 제목</h1>
     <div class="post-meta">
         <span th:text="'조회수: ' + *{views}">조회수: 1,234</span>
-        <span class="author" th:text="'글쓴이:' + *{userName}">작성자</span>
+        <span class="author" th:text="'글쓴이: ' + *{userName}">작성자</span>
         <span th:text="*{createdAt}">2024년 1월 23일</span>
     </div>
 
+    <!-- 글 내용 -->
     <div class="content">
         <p th:text="*{content}">
-            여기에 블로그 글 내용이 들어갑니다. 글의 본문은 이 부분에 작성됩니다. 사용자가 작성한 글의 전체 내용을 포함하게 됩니다.
+            여기에 블로그 글 내용이 들어갑니다. 글의 본문은 이 부분에 작성됩니다.
         </p>
     </div>
 
+    <!-- 수정/삭제 버튼 (작성자 본인인 경우에만) -->
     <div class="button-group" th:object="${boardDTO}">
-        <!-- 수정 버튼 -->
         <a th:if="${isOwner}"
            th:href="@{/board/{id}/update(id=*{id})}"
            class="btn btn-edit">글 수정</a>
-        <!-- 삭제 버튼 -->
         <form th:if="${isOwner}" th:action="@{/board/{id}/delete(id=${id})}" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
             <button type="submit" class="btn btn-delete">글 삭제</button>
         </form>
     </div>
 
+    <!-- 댓글 섹션 -->
     <div class="comments-section">
         <h2>댓글</h2>
-        <div class="comment">
-            <div class="comment-header">
-                <div class="comment-author">홍길동</div>
-                <div class="comment-date">2024년 1월 23일 12:34</div>
+        <!-- 댓글 목록을 담을 컨테이너: controller에서 commentList 모델 속성에 담아 넘겨줌 -->
+        <div id="commentList">
+            <div th:each="comment : ${commentList}" class="comment">
+                <div class="comment-header">
+                    <div class="comment-author" th:text="${comment.username}">작성자</div>
+                    <!-- 댓글 등록 시각이 있다면 형식 지정 -->
+                    <div class="comment-date" th:text="${#dates.format(comment.created_at, 'yyyy년 M월 d일 HH:mm')}">댓글 날짜</div>
+                </div>
+                <p th:text="${comment.content}">댓글 내용</p>
             </div>
-            <p>좋은 글 감사합니다!</p>
-        </div>
-        <div class="comment">
-            <div class="comment-header">
-                <div class="comment-author">김철수</div>
-                <div class="comment-date">2024년 1월 23일 13:45</div>
-            </div>
-            <p>매우 흥미로운 내용이네요.</p>
         </div>
 
-        <textarea class="comment-input" placeholder="댓글을 남겨주세요"></textarea>
-        <button class="submit-button">댓글 등록</button>
+        <!-- 댓글 등록 폼 (AJAX 전송) -->
+        <textarea class="comment-input" id="commentContent" placeholder="댓글을 남겨주세요"></textarea>
+        <button class="submit-button" id="submitComment">댓글 등록</button>
     </div>
+
     <footer>
         <p>© 2024 간단한 게시판. All rights reserved.</p>
     </footer>
 </div>
+
+<!-- boardDTO와 CSRF 토큰, 그리고 현재 게시글 id를 JavaScript 변수로 전달 -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var boardId = [[${boardDTO.id}]];
+    var csrfToken = /*[[${_csrf.token}]]*/ '';
+    var csrfHeader = /*[[${_csrf.headerName}]]*/ '';
+    /*]]>*/
+</script>
+
+<script>
+    document.getElementById("submitComment").addEventListener("click", function() {
+        var content = document.getElementById("commentContent").value;
+        if (!content.trim()) {
+            alert("댓글 내용을 입력하세요.");
+            return;
+        }
+
+        // AJAX로 댓글 작성 API 호출 (POST /api/comments)
+        var commentData = {
+            content: content,
+            board: boardId
+        };
+
+        fetch('/api/comments', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeader]: csrfToken
+            },
+            body: JSON.stringify(commentData)
+        })
+            .then(function(response) {
+                if (!response.ok) {
+                    return response.json().then(function(errorData) { throw errorData; });
+                }
+                return response.json();
+            })
+            .then(function(data) {
+                // 서버로부터 반환받은 댓글 DTO를 기반으로 댓글 목록에 새로운 댓글 추가
+                var commentListDiv = document.getElementById("commentList");
+                var newCommentDiv = document.createElement("div");
+                newCommentDiv.className = "comment";
+                newCommentDiv.innerHTML =
+                    '<div class="comment-header">' +
+                    '<div class="comment-author">' + data.username + '</div>' +
+                    // data.createdAt가 문자열 형태라면 그대로 사용하거나, 포맷팅하여 출력
+                    '<div class="comment-date">' + data.created_at + '</div>' +
+                    '</div>' +
+                    '<p>' + data.content + '</p>';
+                commentListDiv.appendChild(newCommentDiv);
+                // 댓글 입력창 초기화
+                document.getElementById("commentContent").value = "";
+            })
+            .catch(function(error) {
+                console.error("댓글 저장 실패:", error);
+                alert("댓글 저장 중 오류가 발생했습니다.");
+            });
+    });
+</script>
 </body>
 </html>

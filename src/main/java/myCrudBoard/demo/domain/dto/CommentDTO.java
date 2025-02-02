@@ -9,6 +9,9 @@ import myCrudBoard.demo.domain.Board;
 import myCrudBoard.demo.domain.Comment;
 import myCrudBoard.demo.domain.User;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,13 +25,16 @@ public class CommentDTO {
 
     private Long board;//board 엔티티
 
+    private LocalDateTime createdAt;
+
 
     @Builder
-    public CommentDTO(String content,String username,Long user,Long board) {
+    public CommentDTO(String content,String username,Long user,Long board,LocalDateTime created_at,LocalDateTime updated_at) {
         this.content = content;
         this.username = username;
         this.user = user;
         this.board = board;
+
     }
 
     public static CommentDTO fromEntity(Comment comment) {
